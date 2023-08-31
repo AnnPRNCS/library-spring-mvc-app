@@ -22,7 +22,7 @@ public class PeopleDAO {
     }
 
     public Person getPersonById(final int id) {
-        return jdbcTemplate.queryForStream("SELECT * FROM Person WHERE id=?", new BeanPropertyRowMapper<>(Person.class),
+        return jdbcTemplate.queryForStream("SELECT * FROM Person WHERE person_id=?", new BeanPropertyRowMapper<>(Person.class),
                 new Object[]{id}).findAny().orElse(null);
     }
 
@@ -31,10 +31,10 @@ public class PeopleDAO {
     }
 
     public void updatePerson(final Person person, final int id) {
-        jdbcTemplate.update("UPDATE Person SET name=?, birth_year=? WHERE id=?", person.getName(), person.getBirthYear(), id);
+        jdbcTemplate.update("UPDATE Person SET name=?, birth_year=? WHERE person_id=?", person.getName(), person.getBirthYear(), id);
     }
 
     public void deletePerson(final int id) {
-        jdbcTemplate.update("DELETE FROM Person WHERE id=?", id);
+        jdbcTemplate.update("DELETE FROM Person WHERE person_id=?", id);
     }
 }

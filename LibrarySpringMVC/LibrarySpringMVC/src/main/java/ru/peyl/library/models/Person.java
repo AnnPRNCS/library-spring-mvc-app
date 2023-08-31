@@ -11,15 +11,15 @@ public class Person {
     private String name;
     @Min(value = 1900, message = "You enter incorrest year of birth, it shout be more 1900")
     private int birthYear;
-    private int id;
+    private int personId;
 
     public Person() {
     }
 
-    public Person(String name, int birthYear, int id) {
+    public Person(String name, int birthYear, int personId) {
         this.name = name;
         this.birthYear = birthYear;
-        this.id = id;
+        this.personId = personId;
     }
 
     public String getName() {
@@ -30,12 +30,12 @@ public class Person {
         this.name = name;
     }
 
-    public int getId() {
-        return id;
+    public int getPersonId() {
+        return personId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setPersonId(int personId) {
+        this.personId = personId;
     }
 
     public int getBirthYear() {
