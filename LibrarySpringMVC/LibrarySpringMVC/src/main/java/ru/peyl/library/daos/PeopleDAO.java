@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import ru.peyl.library.models.Person;
 
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class PeopleDAO {
@@ -36,5 +37,10 @@ public class PeopleDAO {
 
     public void deletePerson(final int id) {
         jdbcTemplate.update("DELETE FROM Person WHERE person_id=?", id);
+    }
+
+    public Optional<Person> getPersonByName(final String name) {
+        return jdbcTemplate.queryForStream("SELECT * FROM Person WHERE name=?",
+                new BeanPropertyRowMapper<>(Person.class), new Object[]{name}).findAny();
     }
 }
