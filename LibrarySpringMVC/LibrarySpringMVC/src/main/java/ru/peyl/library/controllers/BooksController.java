@@ -54,9 +54,9 @@ public class BooksController {
         return "redirect:/books";
     }
 
-    @PatchMapping("/{id}/free")
-    public String freeBook(@PathVariable("id") final int bookId) {
-        booksDAO.freeBook(bookId);
+    @PatchMapping("/{id}/release")
+    public String releaseBook(@PathVariable("id") final int bookId) {
+        booksDAO.releaseBook(bookId);
         return "redirect:/books";
     }
 
@@ -66,7 +66,6 @@ public class BooksController {
         if (bindingResult.hasErrors()) {
             return "books/new_book";
         }
-        //todo:validation
         booksDAO.addBook(book);
         return "redirect:/books";
     }
@@ -79,9 +78,9 @@ public class BooksController {
     }
 
     @PatchMapping("/{id}")
-    public String postMappingUpdateCurBook(@PathVariable("id") final int id,
-                                           @ModelAttribute("book") @Valid final Book book,
-                                           final BindingResult bindingResult) {
+    public String postMappingUpdateBook(@PathVariable("id") final int id,
+                                        @ModelAttribute("book") @Valid final Book book,
+                                        final BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "books/update_book";
         }

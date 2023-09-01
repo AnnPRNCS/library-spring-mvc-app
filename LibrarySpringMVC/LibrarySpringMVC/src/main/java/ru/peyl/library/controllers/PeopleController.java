@@ -31,7 +31,7 @@ public class PeopleController {
 
     @GetMapping()
     public String getAllPeople(final Model model) {
-        List<Person> people = peopleDAO.getAllPeople();
+        final List<Person> people = peopleDAO.getAllPeople();
         model.addAttribute("people", people);
         return "people/all_people";
     }
@@ -46,12 +46,12 @@ public class PeopleController {
     }
 
     @GetMapping("/new")
-    public String addNewPerson(@ModelAttribute("person") final Person person) {
+    public String getMappingAddNewPerson(@ModelAttribute("person") final Person person) {
         return "people/new_person";
     }
 
     @PostMapping()
-    public String addPerson(@ModelAttribute("person") @Valid final Person person, final BindingResult bindingResult) {
+    public String postMappingAddPerson(@ModelAttribute("person") @Valid final Person person, final BindingResult bindingResult) {
         personValidator.validate(person, bindingResult);
         if (bindingResult.hasErrors()) {
             return "people/new_person";
@@ -61,13 +61,14 @@ public class PeopleController {
     }
 
     @GetMapping("/{id}/edit")
-    public String editPerson(final Model model, @PathVariable("id") final int id) {
+    public String getMappingEditPerson(final Model model, @PathVariable("id") final int id) {
         model.addAttribute("person", peopleDAO.getPersonById(id));
         return "people/update_person";
     }
 
     @PatchMapping("/{id}")
-    public String updatePerson(@PathVariable("id") final int id, @ModelAttribute("person") @Valid final Person person,
+    public String patchMappingEditPerson(@PathVariable("id") final int id,
+                                         @ModelAttribute("person") @Valid final Person person,
                                final BindingResult bindingResult) {
         personValidator.validate(person, bindingResult);
         if (bindingResult.hasErrors()) {

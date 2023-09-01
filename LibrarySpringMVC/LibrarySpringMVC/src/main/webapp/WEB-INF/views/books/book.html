@@ -26,7 +26,7 @@
 </div>
 
 <div th:if="${not #lists.isEmpty(person.name)}">
-<form th:method="PATCH" th:action="@{/books/{id}/free(id=${book.getBookId()})}">
+<form th:method="PATCH" th:action="@{/books/{id}/release(id=${book.getBookId()})}">
     <label for="free">Книга сейчас у: </label>
     <a id="free" th:href="@{/people/{id}(id=${person.getPersonId()})}"  th:text="${person.getName()}"></a>
     <input type="submit" value="Освободить книгу"/>
