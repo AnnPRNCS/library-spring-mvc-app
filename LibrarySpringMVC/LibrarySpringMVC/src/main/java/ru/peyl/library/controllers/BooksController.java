@@ -7,7 +7,9 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.peyl.library.daos.BooksDAO;
+import ru.peyl.library.daos.PeopleDAO;
 import ru.peyl.library.models.Book;
+import ru.peyl.library.models.Person;
 
 import java.util.List;
 
@@ -15,10 +17,12 @@ import java.util.List;
 @RequestMapping("/books")
 public class BooksController {
     private final BooksDAO booksDAO;
+    private final PeopleDAO peopleDAO;
 
     @Autowired
-    public BooksController(BooksDAO booksDAO) {
+    public BooksController(final BooksDAO booksDAO, final PeopleDAO peopleDAO) {
         this.booksDAO = booksDAO;
+        this.peopleDAO = peopleDAO;
     }
 
     @GetMapping()
@@ -29,8 +33,11 @@ public class BooksController {
     }
 
     @GetMapping("/{id}")
-    public String getBookById(@PathVariable("id") final int id, final Model model) {
-        final Book book = booksDAO.getBookById(id);
+    public String getBookById(@PathVariable("id") final int bookId, final Model model) {
+        final Book book = booksDAO.getBookById(bookId);
+        List<Person> people = peopleDAO.getAllPeople();
+        model.addAttribute("person", peopleDAO.getPersonByBook(bookId));
+        model.addAttribute("people", people);
         model.addAttribute("book", book);
         return "books/book";
     }
@@ -38,6 +45,19 @@ public class BooksController {
     @GetMapping("/new")
     public String getMappingAddNewBook(@ModelAttribute("book") final Book book) {
         return "books/new_book";
+    }
+
+    @PatchMapping("/{id}/appoint")
+    public String appointBook(@PathVariable("id") final int bookId,
+                              @ModelAttribute("person") final Person person) {
+        booksDAO.appointBook(person, bookId);
+        return "redirect:/books";
+    }
+
+    @PatchMapping("/{id}/free")
+    public String freeBook(@PathVariable("id") final int bookId) {
+        booksDAO.freeBook(bookId);
+        return "redirect:/books";
     }
 
     @PostMapping()

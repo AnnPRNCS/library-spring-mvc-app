@@ -8,7 +8,36 @@
 <p th:text="${book.getName()}"></p>
 <p th:text="${book.getAuthor()}"></p>
 <p th:text="${book.getYear()}"></p>
+
+</hr>
+</br>
+
+<div th:if="${#lists.isEmpty(person.name)}">
+    <p>Эта книга свободна</p>
+    <form th:method="PATCH" th:action="@{/books/{id}/appoint(id=${book.getBookId()})}">
+        <label for="person">Выберете человека:</label>
+        <select th:object="${person}" th:field="*{personId}" id="person">
+            <option th:each="person:${people}" th:value="${person.getPersonId()}"
+                    th:text="${person.getName()} + ', ' + ${person.getBirthYear()}">
+            </option>
+        </select>
+        <input type="submit" value="Назначить книгу">
+    </form>
+</div>
+
+<div th:if="${not #lists.isEmpty(person.name)}">
+<form th:method="PATCH" th:action="@{/books/{id}/free(id=${book.getBookId()})}">
+    <label for="free">Книга сейчас у: </label>
+    <a id="free" th:href="@{/people/{id}(id=${person.getPersonId()})}"  th:text="${person.getName()}"></a>
+    <input type="submit" value="Освободить книгу"/>
+</form>
+</div>
+
+</hr>
+</br>
+
 <a th:href="@{/books/{id}/edit(id=${book.getBookId()})}">Update book</a>
+
 <form th:method="DELETE" th:action="@{/books/{id}(id=${book.getBookId()})}">
     <input type="submit" value="Delete book"/>
 </form>
