@@ -12,6 +12,7 @@ import ru.peyl.library.models.Book;
 import ru.peyl.library.models.Person;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/books")
@@ -33,11 +34,16 @@ public class BooksController {
     }
 
     @GetMapping("/{id}")
-    public String getBookById(@PathVariable("id") final int bookId, final Model model) {
+    public String getBookById(@PathVariable("id") final int bookId, final Model model,
+                              @ModelAttribute("person") final Person person) {
         final Book book = booksDAO.getBookById(bookId);
         List<Person> people = peopleDAO.getAllPeople();
-        model.addAttribute("person", peopleDAO.getPersonByBook(bookId));
-        model.addAttribute("people", people);
+        Optional<Person> bookOwner = booksDAO.getBookOwner(bookId);
+        if (bookOwner.isPresent()) {
+            model.addAttribute("owner", bookOwner.get());
+        } else {
+            model.addAttribute("people", people);
+        }
         model.addAttribute("book", book);
         return "books/book";
     }
@@ -51,13 +57,13 @@ public class BooksController {
     public String appointBook(@PathVariable("id") final int bookId,
                               @ModelAttribute("person") final Person person) {
         booksDAO.appointBook(person, bookId);
-        return "redirect:/books";
+        return "redirect:/books/" + bookId;
     }
 
     @PatchMapping("/{id}/release")
     public String releaseBook(@PathVariable("id") final int bookId) {
         booksDAO.releaseBook(bookId);
-        return "redirect:/books";
+        return "redirect:/books/" + bookId;
     }
 
     @PostMapping()

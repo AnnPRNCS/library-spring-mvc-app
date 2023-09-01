@@ -2,19 +2,19 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Редактирование книги</title>
 </head>
 <body>
 <form th:method="PATCH" th:action="@{/books/{id}(id=${book.getBookId()})}" th:object="${book}">
-    <label for="name">Name of book </label>
+    <label for="name">Имя книги </label>
     <input id="name" type="text" th:field="*{name}">
     <div style="color:red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
     </br>
-    <label for="author">Author </label>
+    <label for="author">Автор </label>
     <input id = "author" type="text" th:field="*{author}">
     <div style="color:red" th:if="${#fields.hasErrors('author')}" th:errors="*{author}"></div>
     </br>
-    <label for="year">Year </label>
+    <label for="year">Год выпуска </label>
     <input id="year" type="text" th:field="*{year}">
     </br>
     <input type="submit" value="Update book">

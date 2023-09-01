@@ -8,6 +8,7 @@ import ru.peyl.library.models.Book;
 import ru.peyl.library.models.Person;
 
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class BooksDAO {
@@ -48,8 +49,10 @@ public class BooksDAO {
     public void releaseBook(int bookId) {
         jdbcTemplate.update("UPDATE Book SET person_id=? WHERE book_id=?", null, bookId);
     }
-    public List<Book> getAllBooksByPersonId(final int id) {
-        return jdbcTemplate.query("SELECT book_id, name, author, year FROM Book WHERE person_id=?",
-                new BeanPropertyRowMapper<>(Book.class), id);
+
+    public Optional<Person> getBookOwner(final int bookId) {
+        return jdbcTemplate.queryForStream("SELECT Person.*" +
+                        "FROM Book JOIN Person ON Person.person_id = Book.person_id WHERE book_id=?",
+                new BeanPropertyRowMapper<>(Person.class), new Object[]{bookId}).findAny();
     }
 }

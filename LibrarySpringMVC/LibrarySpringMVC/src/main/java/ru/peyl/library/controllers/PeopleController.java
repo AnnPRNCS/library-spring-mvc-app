@@ -6,7 +6,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import ru.peyl.library.daos.BooksDAO;
 import ru.peyl.library.daos.PeopleDAO;
 import ru.peyl.library.models.Book;
 import ru.peyl.library.models.Person;
@@ -18,14 +17,12 @@ import java.util.List;
 @RequestMapping("/people")
 public class PeopleController {
     private final PeopleDAO peopleDAO;
-    private final BooksDAO booksDAO;
     private final PersonValidator personValidator;
 
     @Autowired
-    public PeopleController(final PeopleDAO peopleDAO, BooksDAO booksDAO,
+    public PeopleController(final PeopleDAO peopleDAO,
                             final PersonValidator personValidator) {
         this.peopleDAO = peopleDAO;
-        this.booksDAO = booksDAO;
         this.personValidator = personValidator;
     }
 
@@ -38,7 +35,7 @@ public class PeopleController {
 
     @GetMapping("/{id}")
     public String getPersonById(@PathVariable("id") final int id, final Model model) {
-        final List<Book> allBooksByPersonId = booksDAO.getAllBooksByPersonId(id);
+        final List<Book> allBooksByPersonId = peopleDAO.getAllBooksByPersonId(id);
         Person person = peopleDAO.getPersonById(id);
         model.addAttribute("booksByPerson", allBooksByPersonId);
         model.addAttribute("person", person);
@@ -51,7 +48,8 @@ public class PeopleController {
     }
 
     @PostMapping()
-    public String postMappingAddPerson(@ModelAttribute("person") @Valid final Person person, final BindingResult bindingResult) {
+    public String postMappingAddPerson(@ModelAttribute("person") @Valid final Person person,
+                                       final BindingResult bindingResult) {
         personValidator.validate(person, bindingResult);
         if (bindingResult.hasErrors()) {
             return "people/new_person";
