@@ -43,4 +43,9 @@ public class PeopleDAO {
         return jdbcTemplate.queryForStream("SELECT * FROM Person WHERE name=?",
                 new BeanPropertyRowMapper<>(Person.class), new Object[]{name}).findAny();
     }
+
+    public Person getPersonByBook(final int bookId) {
+        return jdbcTemplate.queryForStream("SELECT Person.person_id, Person.name, birth_year FROM Person LEFT JOIN Book ON Person.person_id = Book.person_id WHERE book_id=?",
+                new BeanPropertyRowMapper<>(Person.class), new Object[]{bookId}).findAny().orElse(new Person());
+    }
 }

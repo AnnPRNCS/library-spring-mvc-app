@@ -7,7 +7,26 @@
 </head>
 <body>
 <p th:text="${person.getName()}"></p>
-<p th:text="${'Birth year' + person.getBirthYear()}"></p>
+<p th:text="${'Birth year ' + person.getBirthYear()}"></p>
+
+</hr>
+</br>
+
+<div th:if="${not #lists.isEmpty(booksByPerson)}">
+<p>Книги:</p>
+    <div th:each="book: ${booksByPerson}">
+        <a th:href="@{/books/{id}(id=${book.getBookId()})}" th:text="${book.getName()} + ', ' + ${book.getAuthor()} + ', '
+    + ${book.getYear()}"></a>
+    </div>
+</div>
+
+<div th:if="${#lists.isEmpty(booksByPerson)}">
+    <p>Человек пока не взял ни одной книги</p>
+</div>
+
+</hr>
+</br>
+
 <a th:href="@{/people/{id}/edit(id=${person.getPersonId()})}">Update person</a>
 <form th:method="DELETE" th:action="@{/people/{id}(id=${person.getPersonId()})}">
     <input type="submit" value="Delete person">

@@ -5,6 +5,7 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import ru.peyl.library.models.Book;
+import ru.peyl.library.models.Person;
 
 import java.util.List;
 
@@ -46,5 +47,9 @@ public class BooksDAO {
 
     public void freeBook(int bookId) {
         jdbcTemplate.update("UPDATE Book SET person_id=? WHERE book_id=?", null, bookId);
+    }
+    public List<Book> getAllBooksByPersonId(final int id) {
+        return jdbcTemplate.query("SELECT book_id, name, author, year FROM Book WHERE person_id=?",
+                new BeanPropertyRowMapper<>(Book.class), id);
     }
 }

@@ -6,7 +6,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import ru.peyl.library.daos.BooksDAO;
 import ru.peyl.library.daos.PeopleDAO;
+import ru.peyl.library.models.Book;
 import ru.peyl.library.models.Person;
 import ru.peyl.library.utils.PersonValidator;
 
@@ -16,11 +18,14 @@ import java.util.List;
 @RequestMapping("/people")
 public class PeopleController {
     private final PeopleDAO peopleDAO;
+    private final BooksDAO booksDAO;
     private final PersonValidator personValidator;
 
     @Autowired
-    public PeopleController(final PeopleDAO peopleDAO, PersonValidator personValidator) {
+    public PeopleController(final PeopleDAO peopleDAO, BooksDAO booksDAO,
+                            final PersonValidator personValidator) {
         this.peopleDAO = peopleDAO;
+        this.booksDAO = booksDAO;
         this.personValidator = personValidator;
     }
 
@@ -33,8 +38,9 @@ public class PeopleController {
 
     @GetMapping("/{id}")
     public String getPersonById(@PathVariable("id") final int id, final Model model) {
-        //todo: провалидировать на null
+        final List<Book> allBooksByPersonId = booksDAO.getAllBooksByPersonId(id);
         Person person = peopleDAO.getPersonById(id);
+        model.addAttribute("booksByPerson", allBooksByPersonId);
         model.addAttribute("person", person);
         return "people/person";
     }
