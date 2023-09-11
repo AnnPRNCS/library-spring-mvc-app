@@ -16,8 +16,8 @@
     <span>Эта книга свободна</span>
     <form th:method="PATCH" th:action="@{/books/{id}/appoint(id=${book.getBookId()})}">
         <label for="person">Выберете человека:</label>
-        <select th:object="${person}" th:field="*{personId}" id="person">
-            <option th:each="person:${people}" th:value="${person.getPersonId()}"
+        <select th:object="${person}" th:field="*{id}" id="person">
+            <option th:each="person:${people}" th:value="${person.getId()}"
                     th:text="${person.getName()} + ', ' + ${person.getBirthYear()}">
             </option>
         </select>
@@ -28,7 +28,7 @@
 <div th:if="${owner}">
 <form th:method="PATCH" th:action="@{/books/{id}/release(id=${book.getBookId()})}">
     <label for="free">Книга сейчас у: </label>
-    <a id="free" th:href="@{/people/{id}(id=${owner.getPersonId()})}"  th:text="${owner.getName()}"></a>
+    <a id="free" th:href="@{/people/{id}(id=${owner.getId()})}"  th:text="${owner.getName()}"></a>
     <input type="submit" value="Освободить книгу"/>
 </form>
 </div>
