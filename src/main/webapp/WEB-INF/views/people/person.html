@@ -14,8 +14,8 @@
 
 <div th:if="${!booksByPerson.isEmpty()}">
 <p>Книги:</p>
-    <div th:each="book: ${booksByPerson}">
-        <a th:href="@{/books/{id}(id=${book.getBookId()})}" th:text="${book.getName()} + ', ' + ${book.getAuthor()} + ', '
+    <div  th:each="book: ${booksByPerson}">
+        <a th:style="${book.isOverdue() ? 'color:red' : 'color:black'}" th:href="@{/books/{id}(id=${book.getBookId()})}" th:text="${book.getName()} + ', ' + ${book.getAuthor()} + ', '
     + ${book.getYear()}"></a>
     </div>
 </div>

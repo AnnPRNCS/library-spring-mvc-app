@@ -8,6 +8,7 @@ import ru.peyl.library.models.Book;
 import ru.peyl.library.models.Person;
 import ru.peyl.library.repositories.PeopleRepository;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -52,7 +53,22 @@ public class PeopleService {
     @Transactional
     public List<Book> getAllBooksByPersonId(final int id) {
         Optional<Person> optionalPerson = peopleRepository.findById(id);
-        Hibernate.initialize(optionalPerson.get().getBooks());
-        return optionalPerson.map(Person::getBooks).orElse(null);
+        if (optionalPerson.isPresent()) {
+            Hibernate.initialize(optionalPerson.get().getBooks());
+            final List<Book> books = optionalPerson.get().getBooks();
+            for (final Book book : books) {
+                book.setOverdue(isOverdue(book.getTakenAT()));
+            }
+            return books;
+        }
+        return null;
+    }
+
+    private boolean isOverdue(final Date takenAT) {
+        if (takenAT == null) {
+            return false;
+        }
+        long diffirenceBetweenDays = new Date().getTime() - takenAT.getTime();
+        return diffirenceBetweenDays >= 864000000;
     }
 }

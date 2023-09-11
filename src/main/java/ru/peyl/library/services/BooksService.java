@@ -9,6 +9,7 @@ import ru.peyl.library.models.Book;
 import ru.peyl.library.models.Person;
 import ru.peyl.library.repositories.BookRepository;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,7 +24,7 @@ public class BooksService {
     }
 
     public List<Book> getAllBooks(Integer page, Integer booksPerPage, Boolean sortByYear) {
-        if (page != null && booksPerPage!= null && (sortByYear == null || !sortByYear)) {
+        if (page != null && booksPerPage != null && (sortByYear == null || !sortByYear)) {
             return bookRepository.findAll(PageRequest.of(page, booksPerPage)).getContent();
         } else if (page != null && booksPerPage != null) {
             return bookRepository.findAll(PageRequest.of(page, booksPerPage, Sort.by("year"))).getContent();
@@ -59,6 +60,7 @@ public class BooksService {
         final Optional<Book> optionalBook = bookRepository.findById(bookId);
         if (optionalBook.isPresent()) {
             Book book = optionalBook.get();
+            book.setTakenAT(new Date());
             book.setOwner(person);
             //person.getBooks().add(book);
             bookRepository.save(book);
@@ -70,6 +72,7 @@ public class BooksService {
         final Optional<Book> optionalBook = bookRepository.findById(bookId);
         if (optionalBook.isPresent()) {
             Book book = optionalBook.get();
+            book.setTakenAT(null);
             final Person owner = book.getOwner();
             owner.getBooks().remove(book);
             book.setOwner(null);

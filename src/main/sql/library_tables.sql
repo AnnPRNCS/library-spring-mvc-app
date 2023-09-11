@@ -10,3 +10,6 @@ CREATE TABLE Book (
     author varchar NOT NULL,
     year int
 );
+
+ALTER TABLE Book ADD COLUMN taken_at timestamp;
+UPDATE Book SET taken_at='2023-09-01 10:00:00' WHERE book_id=4;
