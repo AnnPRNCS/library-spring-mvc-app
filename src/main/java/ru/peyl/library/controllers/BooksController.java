@@ -36,6 +36,16 @@ public class BooksController {
         return "books/all_books";
     }
 
+    @GetMapping("/search")
+    public String getAllBooksByName(@RequestParam(name = "patternForName", required = false) final String patternForName,
+                                    final Model model) {
+        if (patternForName != null) {
+            final List<Book> allBooksStartWith = booksService.getAllBooksStartWith(patternForName);
+            model.addAttribute("books", allBooksStartWith);
+        }
+        return "books/search";
+    }
+
     @GetMapping("/{id}")
     public String getBookById(@PathVariable("id") final int bookId, final Model model,
                               @ModelAttribute("person") final Person person) {

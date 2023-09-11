@@ -34,6 +34,10 @@ public class BooksService {
         return bookRepository.findAll();
     }
 
+    public List<Book> getAllBooksStartWith(final String pattern) {
+        return bookRepository.findByNameStartingWith(pattern);
+    }
+
     public Book getBookById(final int id) {
         return bookRepository.findById(id).orElse(null);
     }
