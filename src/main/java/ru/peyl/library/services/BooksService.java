@@ -1,6 +1,8 @@
 package ru.peyl.library.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.peyl.library.models.Book;
@@ -20,7 +22,14 @@ public class BooksService {
         this.bookRepository = bookRepository;
     }
 
-    public List<Book> getAllBooks() {
+    public List<Book> getAllBooks(Integer page, Integer booksPerPage, Boolean sortByYear) {
+        if (page != null && booksPerPage!= null && (sortByYear == null || !sortByYear)) {
+            return bookRepository.findAll(PageRequest.of(page, booksPerPage)).getContent();
+        } else if (page != null && booksPerPage != null) {
+            return bookRepository.findAll(PageRequest.of(page, booksPerPage, Sort.by("year"))).getContent();
+        } else if (sortByYear != null && sortByYear) {
+            return bookRepository.findAll(Sort.by("year"));
+        }
         return bookRepository.findAll();
     }
 
