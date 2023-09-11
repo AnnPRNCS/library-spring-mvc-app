@@ -12,6 +12,7 @@ You can use my application for working with books and users in a library. You ca
 * look who has taken the book
 * release the book to a library
 * appoint the book to a user 
+* search book, which will be start with your pattern from the form
 ## Installing
 You have to install:
 1. JDK 20 or higher - https://bell-sw.com/pages/downloads/
@@ -52,7 +53,8 @@ The application has some main pages.
 Her path is http://localhost:8080/people - On this page you can add a new user and watch all library users.\
 http://localhost:8080/people/new - path for adding a new user.\
 http://localhost:8080/people/{id}/edit - path for updating the user.\
-http://localhost:8080/people/{id} - GET method, show the user.\
+http://localhost:8080/people/{id} - GET method, show the user. You can see all books, which the user has taken. Books,
+which was overdue, are red.\
 http://localhost:8080/people/{id} - DELETE method, delete the user from DB.
 
 ### The main page for work with books.
@@ -62,7 +64,9 @@ http://localhost:8080/books/{id}/edit - path for updating the book.\
 http://localhost:8080/books/{id} - GET method, show the book.\
 http://localhost:8080/books/{id} - DELETE method, delete the book from DB.\
 http://localhost:8080/{id}/appoint - appoint the book to a user.\
-http://localhost:8080/{id}/release - release the book from user.
+http://localhost:8080/{id}/release - release the book from user.\
+http://localhost:8080/books/search - find book, which will start with your patter. If book was appointed,
+you see current owner. If book are free, you know about it by sentence.
 
 **For all actions we use buttons and links.**
 
