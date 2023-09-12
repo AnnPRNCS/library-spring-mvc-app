@@ -56,32 +56,26 @@ public class BooksService {
 
     @Transactional
     public void deleteBook(final int id) {
-        bookRepository.delete(getBookById(id));
+        bookRepository.deleteById(id);
     }
 
     @Transactional
     public void appointBook(final Person person, final int bookId) {
-        final Optional<Book> optionalBook = bookRepository.findById(bookId);
-        if (optionalBook.isPresent()) {
-            Book book = optionalBook.get();
-            book.setTakenAT(new Date());
-            book.setOwner(person);
-            //person.getBooks().add(book);
-            bookRepository.save(book);
-        }
+        bookRepository.findById(bookId)
+                .ifPresent(book -> {
+                    book.setTakenAT(new Date());
+                    book.setOwner(person);
+                });
+
     }
 
     @Transactional
     public void releaseBook(int bookId) {
-        final Optional<Book> optionalBook = bookRepository.findById(bookId);
-        if (optionalBook.isPresent()) {
-            Book book = optionalBook.get();
-            book.setTakenAT(null);
-            final Person owner = book.getOwner();
-            owner.getBooks().remove(book);
-            book.setOwner(null);
-            bookRepository.save(book);
-        }
+        bookRepository.findById(bookId)
+                .ifPresent(book -> {
+                    book.setTakenAT(null);
+                    book.setOwner(null);
+                });
     }
 
     public Optional<Person> getBookOwner(final int bookId) {

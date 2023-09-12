@@ -8,6 +8,7 @@ import ru.peyl.library.models.Book;
 import ru.peyl.library.models.Person;
 import ru.peyl.library.repositories.PeopleRepository;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -61,7 +62,7 @@ public class PeopleService {
             }
             return books;
         }
-        return null;
+        return Collections.emptyList();
     }
 
     private boolean isOverdue(final Date takenAT) {
